@@ -1,0 +1,7 @@
+Config = {
+  namescript ="NamHub",
+  logscript = "125824706340018",
+  tacgia = "Nam",
+{
+loadstring(game:HttpGet("https://raw.githubusercontent.com/namdgnamdg88-ai/Nam/refs/heads/main/DaiNamhub.txt"))()
+ 	
