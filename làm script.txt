@@ -1,0 +1,206 @@
+-- Tác giả: DaiNamHub
+local Player = game:GetService("Players").LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+
+-- Tạo giao diện
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "DaiNamHubScript"
+ScreenGui.Parent = Player:WaitForChild("PlayerGui")
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 400, 0, 350) -- Tăng chiều cao để chứa ảnh
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -175)
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+MainFrame.BorderSizePixel = 2
+MainFrame.BorderColor3 = Color3.fromRGB(255, 255, 255)
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Parent = ScreenGui
+
+-- Thanh tiêu đề
+local TitleBar = Instance.new("Frame")
+TitleBar.Name = "TitleBar"
+TitleBar.Size = UDim2.new(1, 0, 0, 30)
+TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+TitleBar.BorderSizePixel = 0
+TitleBar.Parent = MainFrame
+
+local Title = Instance.new("TextLabel")
+Title.Name = "Title"
+Title.Size = UDim2.new(0.7, 0, 1, 0)
+Title.Position = UDim2.new(0, 10, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "DaiNamHub Script | Blox Fruits"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 14
+Title.Parent = TitleBar
+
+-- Nút điều khiển
+local CloseButton = Instance.new("TextButton")
+CloseButton.Name = "CloseButton"
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Position = UDim2.new(1, -90, 0, 0)
+CloseButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+CloseButton.Text = "-"
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.TextSize = 20
+CloseButton.Parent = TitleBar
+
+local MaximizeButton = Instance.new("TextButton")
+MaximizeButton.Name = "MaximizeButton"
+MaximizeButton.Size = UDim2.new(0, 30, 0, 30)
+MaximizeButton.Position = UDim2.new(1, -60, 0, 0)
+MaximizeButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MaximizeButton.Text = "□"
+MaximizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+MaximizeButton.Font = Enum.Font.GothamBold
+MaximizeButton.TextSize = 18
+MaximizeButton.Parent = TitleBar
+
+local DeleteButton = Instance.new("TextButton")
+DeleteButton.Name = "DeleteButton"
+DeleteButton.Size = UDim2.new(0, 30, 0, 30)
+DeleteButton.Position = UDim2.new(1, -30, 0, 0)
+DeleteButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+DeleteButton.Text = "×"
+DeleteButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+DeleteButton.Font = Enum.Font.GothamBold
+DeleteButton.TextSize = 24
+DeleteButton.Parent = TitleBar
+
+-- ========== ẢNH MENU ==========
+-- Bạn cần thay link ảnh của bạn vào đây
+local MenuImage = Instance.new("ImageLabel")
+MenuImage.Name = "MenuImage"
+MenuImage.Size = UDim2.new(1, -20, 0, 80) -- Chiều cao ảnh
+MenuImage.Position = UDim2.new(0, 10, 0, 40)
+MenuImage.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+MenuImage.BorderSizePixel = 0
+MenuImage.Image = "rbxassetid://80459931196227"
+MenuImage.ScaleType = Enum.ScaleType.Crop
+MenuImage.Parent = MainFrame
+
+-- Hiển thị khi không có ảnh
+local NoImageText = Instance.new("TextLabel")
+NoImageText.Name = "NoImageText"
+NoImageText.Size = UDim2.new(1, 0, 1, 0)
+NoImageText.BackgroundTransparency = 1
+NoImageText.Text = "Chèn ảnh tại dòng 70\nMenuImage.Image = 'rbxassetid://...'"
+NoImageText.TextColor3 = Color3.fromRGB(150, 150, 150)
+NoImageText.Font = Enum.Font.Gotham
+NoImageText.TextSize = 12
+NoImageText.TextWrapped = true
+NoImageText.Visible = false -- Ẩn khi có ảnh
+NoImageText.Parent = MenuImage
+-- =============================
+
+-- Khu vực nội dung
+local Content = Instance.new("ScrollingFrame")
+Content.Name = "Content"
+Content.Size = UDim2.new(1, -20, 1, -140) -- Điều chỉnh vị trí do có ảnh
+Content.Position = UDim2.new(0, 10, 0, 130)
+Content.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+Content.BorderSizePixel = 0
+Content.ScrollBarThickness = 8
+Content.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
+Content.CanvasSize = UDim2.new(0, 0, 0, 0)
+Content.AutomaticCanvasSize = Enum.AutomaticSize.Y
+Content.Parent = MainFrame
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Padding = UDim.new(0, 5)
+UIListLayout.Parent = Content
+
+-- Toggle đóng/mở menu
+local ToggleButton = Instance.new("TextButton")
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Size = UDim2.new(0, 50, 0, 50)
+ToggleButton.Position = UDim2.new(0, 20, 0.5, -25)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+ToggleButton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.Text = "☰"
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.Font = Enum.Font.GothamBold
+ToggleButton.TextSize = 24
+ToggleButton.Visible = false
+ToggleButton.Parent = ScreenGui
+
+-- Biến trạng thái
+local isMinimized = false
+local originalSize = MainFrame.Size
+local originalPosition = MainFrame.Position
+
+-- Chức năng nút đóng (ẩn menu)
+CloseButton.MouseButton1Click:Connect(function()
+    isMinimized = true
+    MainFrame.Visible = false
+    ToggleButton.Visible = true
+end)
+
+-- Chức năng nút phóng to/thu nhỏ
+MaximizeButton.MouseButton1Click:Connect(function()
+    if MainFrame.Size == originalSize then
+        MainFrame.Size = UDim2.new(0, 600, 0, 500)
+        MainFrame.Position = UDim2.new(0.5, -300, 0.5, -250)
+    else
+        MainFrame.Size = originalSize
+        MainFrame.Position = originalPosition
+    end
+end)
+
+-- Chức năng xóa script
+DeleteButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+-- Chức năng toggle đóng/mở
+ToggleButton.MouseButton1Click:Connect(function()
+    isMinimized = false
+    MainFrame.Visible = true
+    ToggleButton.Visible = false
+end)
+
+-- Kiểm tra ảnh
+if MenuImage.Image == "rbxassetid://1234567890" then
+    NoImageText.Visible = true
+    MenuImage.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+end
+
+-- Thêm nút mẫu
+local function addButton(text)
+    local Button = Instance.new("TextButton")
+    Button.Size = UDim2.new(1, 0, 0, 40)
+    Button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    Button.BorderColor3 = Color3.fromRGB(100, 100, 100)
+    Button.Text = text
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.Font = Enum.Font.Gotham
+    Button.TextSize = 14
+    Button.Parent = Content
+    
+    Button.MouseButton1Click:Connect(function()
+        print("Clicked: " .. text)
+    end)
+end
+
+-- Thêm các nút
+addButton("Auto Farm Level")
+addButton("Auto Collect Fruits")
+addButton("Teleport Islands")
+addButton("Auto Raid")
+addButton("Kill Aura")
+addButton("Infinite Energy")
+addButton("Speed Hack")
+addButton("Fly Hack")
+addButton("ESP Players")
+addButton("Auto Buy Stats")
+
+-- Thông báo
+print("DaiNamHub Script Loaded!")
+print("Toggle button: ☰")
+if MenuImage.Image == "rbxassetid://1234567890" then
+end
